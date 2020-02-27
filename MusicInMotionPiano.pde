@@ -1,4 +1,8 @@
-//ver 1.4
+//ver 1.5
+//Music in Motion Piano Version 
+//by Jack Murphy, Anshuman Sahu, Lauren Arzbaecher and Ryan Fairweather
+//uses code from Thomas Sanchez Lengeling's "SkeletonColor.pde" example sketch
+//from the KinectPV2 library for processing
 import processing.sound.*;
 import KinectPV2.KJoint;
 import KinectPV2.*;
@@ -14,13 +18,12 @@ KinectPV2 kinect;
 KJoint[] joints;
 
 void setup() {
-  //size(1000, 1000, P3D);
   fullScreen(P3D);
   kinect = new KinectPV2(this);
   kinect.enableSkeletonColorMap(true);
   kinect.enableColorImg(true);
   kinect.init();
-  note[0] = new SoundFile(this, "Piano_3.mp3");
+  note[0] = new SoundFile(this, "Piano_03.mp3");
   note[1] = new SoundFile(this, "Piano_10.mp3");
   note[2] = new SoundFile(this, "Piano_28.mp3");
   note[3] = new SoundFile(this, "Piano_21.mp3");
@@ -51,8 +54,8 @@ void draw() {
     }
   }
   stroke(255, 0, 0);
-  line0 = 256;
-  line1 = 270;
+  line0 = 275;
+  line1 = 675;
   line2 = width-line1;
   line3 = height-(height-line0)/2;
   if (note[0].isPlaying() == false && note[1].isPlaying() == false && 
@@ -74,11 +77,11 @@ void draw() {
   line(line2, line3, width, line3);
   textSize(30);
   fill(255, 0, 0);
-  text("1", width/2, 111);
-  text("2", 100, 451);
-  text("3", 100, 820);
-  text("4", width-100, 450);
-  text("5", width-100, 842);
+  text("1", width/2, line0/2);
+  text("2", line1/2, 451);
+  text("3", line1/2, 820);
+  text("4", width-line1/2, 450);
+  text("5", width-line1/2, 842);
   text(frameRate, 50, 50);
 }
 
