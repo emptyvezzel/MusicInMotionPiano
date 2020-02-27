@@ -1,15 +1,21 @@
-//ver 1.3
+//ver 1.4
 import processing.sound.*;
 import KinectPV2.KJoint;
 import KinectPV2.*;
 SoundFile [] note = new SoundFile[5];
 int line0, line1, line2, line3;
 int xVar = 50;
+float leftHandX;
+float leftHandY;
+float rightHandX;
+float rightHandY;
 boolean playing = false;
 KinectPV2 kinect;
+KJoint[] joints;
 
 void setup() {
-  size(1000, 1000, P3D);
+  //size(1000, 1000, P3D);
+  fullScreen(P3D);
   kinect = new KinectPV2(this);
   kinect.enableSkeletonColorMap(true);
   kinect.enableColorImg(true);
@@ -23,25 +29,25 @@ void setup() {
 
 void draw() {
   background(0);
-
   image(kinect.getColorImage(), 0, 0, width, height);
-
   ArrayList<KSkeleton> skeletonArray =  kinect.getSkeletonColorMap();
-
   //individual JOINTS
   for (int i = 0; i < skeletonArray.size(); i++) {
     KSkeleton skeleton = (KSkeleton) skeletonArray.get(i);
     if (skeleton.isTracked()) {
       KJoint[] joints = skeleton.getJoints();
-
       color col  = skeleton.getIndexColor();
       fill(col);
       stroke(col);
       drawBody(joints);
-
       //draw different color for each hand state
       drawHandState(joints[KinectPV2.JointType_HandRight]);
       drawHandState(joints[KinectPV2.JointType_HandLeft]);
+      //getting limb Variables
+      leftHandX = joints[KinectPV2.JointType_HandLeft].getX();
+      leftHandY = joints[KinectPV2.JointType_HandLeft].getY();
+      rightHandX = joints[KinectPV2.JointType_HandRight].getX();
+      rightHandY = joints[KinectPV2.JointType_HandRight].getY();
     }
   }
   stroke(255, 0, 0);
@@ -53,11 +59,14 @@ void draw() {
     note[2].isPlaying() == false && note[3].isPlaying() == false && 
     note[4].isPlaying() == false) playing = false;
   else playing = true;
-  if (mouseY > line3 && mouseX < line1 && playing == false) note[0].play();
-  if (mouseY < line3 && mouseY > line0 && mouseX < line1 && playing == false) note[1].play();
-  if (mouseY < line0 && mouseX > line1 && mouseX < line2 && playing == false) note[2].play();
-  if (mouseY > line0 && mouseY < line3 && mouseX > line2 && playing == false) note[3].play();
-  if (mouseY > line3 && mouseX > line2 && playing == false) note[4].play();
+  if (leftHandY > line3 && leftHandX < line1 && playing == false) note[0].play();
+  if (leftHandY < line0 && leftHandX > line1 && leftHandX < line2 && playing == false) note[2].play();
+  if (leftHandY > line0 && leftHandY < line3 && leftHandX > line2 && playing == false) note[3].play();
+  if (leftHandY > line3 && leftHandX > line2 && playing == false) note[4].play();
+  if (rightHandY > line3 && rightHandX < line1 && playing == false) note[0].play();
+  if (rightHandY < line0 && rightHandX > line1 && rightHandX < line2 && playing == false) note[2].play();
+  if (rightHandY > line0 && rightHandY < line3 && rightHandX > line2 && playing == false) note[3].play();
+  if (rightHandY > line3 && rightHandX > line2 && playing == false) note[4].play();
   line(0, line0, width, line0);
   line(line1, 0, line1, height);
   line(line2, 0, line2, height);
@@ -65,13 +74,14 @@ void draw() {
   line(line2, line3, width, line3);
   textSize(30);
   fill(255, 0, 0);
-  text("1", 500, 111);
+  text("1", width/2, 111);
   text("2", 100, 451);
   text("3", 100, 820);
-  text("4", 858, 450);
-  text("5", 866, 842);
+  text("4", width-100, 450);
+  text("5", width-100, 842);
   text(frameRate, 50, 50);
 }
+
 //DRAW BODY
 void drawBody(KJoint[] joints) {
   drawBone(joints, KinectPV2.JointType_Head, KinectPV2.JointType_Neck);
