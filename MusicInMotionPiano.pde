@@ -1,4 +1,4 @@
-//ver 1.5
+//ver 1.6
 //Music in Motion Piano Version 
 //by Jack Murphy, Anshuman Sahu, Lauren Arzbaecher and Ryan Fairweather
 //uses code from Thomas Sanchez Lengeling's "SkeletonColor.pde" example sketch
@@ -32,6 +32,7 @@ void setup() {
 
 void draw() {
   background(0);
+  strokeWeight(2.0);
   image(kinect.getColorImage(), 0, 0, width, height);
   ArrayList<KSkeleton> skeletonArray =  kinect.getSkeletonColorMap();
   //individual JOINTS
@@ -54,6 +55,7 @@ void draw() {
     }
   }
   stroke(255, 0, 0);
+  strokeWeight(20.0);
   line0 = 275;
   line1 = 675;
   line2 = width-line1;
@@ -63,10 +65,12 @@ void draw() {
     note[4].isPlaying() == false) playing = false;
   else playing = true;
   if (leftHandY > line3 && leftHandX < line1 && playing == false) note[0].play();
+  if (leftHandY > line0 && leftHandX < line1 && leftHandY < line3 && playing == false) note[1].play();
   if (leftHandY < line0 && leftHandX > line1 && leftHandX < line2 && playing == false) note[2].play();
   if (leftHandY > line0 && leftHandY < line3 && leftHandX > line2 && playing == false) note[3].play();
   if (leftHandY > line3 && leftHandX > line2 && playing == false) note[4].play();
   if (rightHandY > line3 && rightHandX < line1 && playing == false) note[0].play();
+  if (rightHandY > line0 && rightHandX < line1 && rightHandY < line3 && playing == false) note[1].play();
   if (rightHandY < line0 && rightHandX > line1 && rightHandX < line2 && playing == false) note[2].play();
   if (rightHandY > line0 && rightHandY < line3 && rightHandX > line2 && playing == false) note[3].play();
   if (rightHandY > line3 && rightHandX > line2 && playing == false) note[4].play();
@@ -75,14 +79,14 @@ void draw() {
   line(line2, 0, line2, height);
   line(0, line3, line1, line3);
   line(line2, line3, width, line3);
-  textSize(30);
+  textSize(150);
   fill(255, 0, 0);
   text("1", width/2, line0/2);
   text("2", line1/2, 451);
   text("3", line1/2, 820);
   text("4", width-line1/2, 450);
   text("5", width-line1/2, 842);
-  text(frameRate, 50, 50);
+  //text(frameRate, 50, 50);
 }
 
 //DRAW BODY
